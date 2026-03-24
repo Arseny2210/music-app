@@ -1,0 +1,49 @@
+.header {
+	background: white;
+	border-bottom: 1px solid #e7e5e4;
+	position: sticky;
+	top: 0;
+	z-index: 50;
+}
+
+.container {
+	max-width: 1200px;
+	margin: auto;
+	padding: 16px 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.title {
+	font-size: 20px;
+	font-weight: 700;
+	color: #18181b;
+}
+
+.menu {
+	display: flex;
+	gap: 18px;
+}
+
+.menuItem {
+	font-size: 15px;
+	color: #71717a;
+	transition: color 0.2s;
+}
+
+.menuItem:hover {
+	color: #ff5a5f;
+}
+
+.menuItemActive {
+	color: #ff5a5f;
+	font-weight: 600;
+}
+
+@media (max-width: 640px) {
+	.container {
+		flex-direction: column;
+		gap: 10px;
+	}
+}

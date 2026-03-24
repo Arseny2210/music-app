@@ -1,0 +1,34 @@
+.container {
+	max-width: 1200px;
+	margin: auto;
+	padding: 30px 20px;
+}
+
+.title {
+	font-size: 36px;
+	font-weight: 700;
+	margin-bottom: 30px;
+}
+
+.filters {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 30px;
+	flex-wrap: wrap;
+}
+
+.filters button {
+	background: white;
+	border: 1px solid #e7e5e4;
+	padding: 6px 14px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: all 0.2s;
+}
+
+.filters button:hover {
+	background: #ff5a5f;
+	color: white;
+	border-color: #ff5a5f;
+}

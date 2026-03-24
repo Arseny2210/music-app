@@ -1,0 +1,65 @@
+.grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 24px;
+}
+
+.card {
+	background: white;
+	border: 1px solid #e7e5e4;
+	border-radius: 16px;
+	padding: 14px;
+	cursor: pointer;
+	transition: all 0.2s;
+	position: relative;
+	overflow: hidden;
+}
+
+.card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.cover {
+	width: 100%;
+	border-radius: 12px;
+	object-fit: cover;
+}
+
+.imageWrapper {
+	position: relative;
+}
+
+.play {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	background: #ff5a5f;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-size: 18px;
+	opacity: 0;
+	transform: scale(0.8);
+	transition: all 0.2s;
+}
+
+.card:hover .play {
+	opacity: 1;
+	transform: scale(1);
+}
+
+.name {
+	margin-top: 10px;
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.genre {
+	font-size: 13px;
+	color: #71717a;
+}
