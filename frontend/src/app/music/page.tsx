@@ -26,8 +26,6 @@ export default function MusicPage() {
 
 	return (
 		<div className={styles.container}>
-			<h1 className={styles.title}>Music</h1>
-
 			<div className={styles.filters}>
 				<button onClick={() => setGenre('all')}>Все</button>
 				<button onClick={() => setGenre('pop')}>Поп</button>

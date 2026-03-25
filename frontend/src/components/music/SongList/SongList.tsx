@@ -43,6 +43,7 @@ export default function SongList({ songs, loading }: Props) {
 							width={300}
 							height={300}
 							className={styles.cover}
+							sizes='(max-width: 768px) 100vw, 300px'
 						/>
 
 						<div className={styles.play}>▶</div>
