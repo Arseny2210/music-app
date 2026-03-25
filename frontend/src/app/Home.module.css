@@ -1,17 +1,279 @@
+.page {
+	background: linear-gradient(180deg, #f8f8f8, #ffffff);
+	min-height: 100vh;
+}
+
 .container {
-	max-width: 800px;
+	max-width: 1000px;
 	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
+	padding: 60px 20px;
 }
 
-.title {
-	font-size: 40px;
+/* HERO */
+.hero {
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.hero h1 {
+	font-size: 42px;
 	font-weight: 700;
+	color: #000;
+	margin-bottom: 15px;
 }
 
-.text {
+.hero p {
+	color: #555;
+	font-size: 18px;
+	max-width: 600px;
+	margin: 0 auto 20px;
+}
+
+.heroButtons {
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+/* BUTTONS */
+.primaryBtn {
+	background: #000;
+	color: #fff;
+	padding: 12px 20px;
+	border-radius: 10px;
+	text-decoration: none;
+	transition: 0.2s;
+}
+
+.primaryBtn:hover {
+	background: #222;
+}
+
+.secondaryBtn {
+	background: #eee;
+	color: #000;
+	padding: 12px 20px;
+	border-radius: 10px;
+	text-decoration: none;
+	transition: 0.2s;
+}
+
+.secondaryBtn:hover {
+	background: #ddd;
+}
+
+/* GRID */
+.grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 15px;
+	margin-top: 20px;
+}
+
+.card {
+	text-align: center;
+	background: #fff;
+	padding: 20px;
+	border-radius: 16px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+	transition: 0.25s;
+}
+
+.card:hover {
+	transform: translateY(-5px);
+}
+
+.titleSmall {
+	font-size: 20px;
+}
+
+/* BLOCK */
+.block {
+	margin-top: 40px;
+}
+
+.block h2 {
+	margin-bottom: 10px;
+}
+
+.block li {
+	color: #444;
+	margin-bottom: 6px;
+}
+
+/* PRICING */
+.pricing {
+	margin-top: 40px;
+	text-align: center;
+}
+
+.priceGrid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 15px;
+	margin-top: 20px;
+}
+
+.priceCard {
+	background: #fff;
+	padding: 25px;
+	border-radius: 16px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.price {
+	font-size: 22px;
+	font-weight: 700;
+	margin-top: 10px;
+}
+
+/* CTA */
+.cta {
+	margin-top: 50px;
+	padding: 45px 30px;
+	border-radius: 20px;
+
+	/* 🖤 спокойный тёмный градиент */
+	background: linear-gradient(135deg, #0f0f10, #1a1a1d);
+
+	color: #fff;
+	text-align: center;
+	position: relative;
+
+	border: 1px solid rgba(255, 255, 255, 0.06);
+	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+
+	transition: 0.25s;
+}
+
+.cta:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* лёгкий внутренний свет (очень subtle) */
+.cta::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: 20px;
+	background: linear-gradient(
+		120deg,
+		rgba(255, 255, 255, 0.04),
+		transparent 40%
+	);
+	pointer-events: none;
+}
+
+/* текст */
+.cta h2 {
+	font-size: 24px;
+	margin-bottom: 8px;
+}
+
+.cta p {
 	color: #a1a1aa;
-	line-height: 1.6;
+	margin-bottom: 20px;
+}
+
+/* кнопка — контрастная */
+.cta .primaryBtn {
+	background: #fff;
+	color: #000;
+	font-weight: 600;
+	padding: 12px 22px;
+	border-radius: 10px;
+	transition: 0.2s;
+}
+
+.cta .primaryBtn:hover {
+	background: #e5e5e5;
+	transform: scale(1.05);
+}
+
+/* CONTACTS */
+.contacts {
+	margin-top: 50px;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 10px;
+}
+
+.contacts a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 12px;
+	background: #fff;
+	border-radius: 10px;
+	text-decoration: none;
+	color: #000;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+	transition: 0.2s;
+}
+
+.contacts a:hover {
+	transform: translateY(-3px);
+}
+
+/* ADAPTIVE */
+@media (max-width: 768px) {
+	.hero h1 {
+		font-size: 28px;
+	}
+
+	.grid {
+		grid-template-columns: 1fr;
+	}
+
+	.priceGrid {
+		grid-template-columns: 1fr;
+	}
+
+	.contacts {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+/* USE CASES */
+.useCases {
+	margin-top: 40px;
+	text-align: center;
+}
+
+.useGrid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+	margin-top: 20px;
+}
+
+.useCard {
+	background: #fff;
+	padding: 18px;
+	border-radius: 14px;
+	font-weight: 500;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.useCard:hover {
+	background: #000;
+	color: #fff;
+}
+
+/* усилим кликабельность */
+.card,
+.priceCard,
+.contacts a {
+	cursor: pointer;
+}
+
+@media (max-width: 480px) {
+	.contacts {
+		grid-template-columns: 1fr;
+	}
 }

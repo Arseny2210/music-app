@@ -4,14 +4,30 @@ import { usePlayer } from '@/components/player/PlayerContext'
 import { Song } from '@/types/song'
 import Image from 'next/image'
 import styles from './SongList.module.css'
+
 type Props = {
 	songs: Song[]
+	loading?: boolean
 }
 
-export default function SongList({ songs }: Props) {
+export default function SongList({ songs, loading }: Props) {
 	const { play } = usePlayer()
 
-	console.log(songs)
+	// 🔥 SKELETON
+	if (loading) {
+		return (
+			<div className={styles.grid}>
+				{Array.from({ length: 8 }).map((_, i) => (
+					<div key={i} className={styles.card}>
+						<div className={styles.skeletonImage} />
+						<div className={styles.skeletonText} />
+						<div className={styles.skeletonSubText} />
+					</div>
+				))}
+			</div>
+		)
+	}
+
 	return (
 		<div className={styles.grid}>
 			{songs.map(song => (

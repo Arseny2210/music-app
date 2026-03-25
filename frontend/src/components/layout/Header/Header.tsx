@@ -12,7 +12,7 @@ export default function Header() {
 		<header className={styles.header}>
 			<div className={styles.container}>
 				<h1 className={styles.title}>
-					<Link href={'/'}>Музыкальное приложение</Link>
+					<Link href={'/'}>Музыка для Вас</Link>
 				</h1>
 
 				<div className={styles.menu}>

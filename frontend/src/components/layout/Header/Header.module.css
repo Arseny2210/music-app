@@ -1,5 +1,6 @@
 .header {
-	background: white;
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(10px);
 	border-bottom: 1px solid #e7e5e4;
 	position: sticky;
 	top: 0;
@@ -9,41 +10,120 @@
 .container {
 	max-width: 1200px;
 	margin: auto;
-	padding: 16px 20px;
+	padding: 16px 24px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	gap: 20px;
 }
 
+/* LOGO */
 .title {
-	font-size: 20px;
+	font-size: 28px;
 	font-weight: 700;
 	color: #18181b;
+	cursor: pointer;
+	transition: 0.2s;
+	white-space: nowrap;
 }
 
+.title:hover {
+	opacity: 0.7;
+}
+
+/* MENU */
 .menu {
 	display: flex;
-	gap: 18px;
+	gap: 28px;
+	align-items: center;
 }
 
+/* пункты */
 .menuItem {
-	font-size: 15px;
+	font-size: 18px;
 	color: #71717a;
-	transition: color 0.2s;
+	position: relative;
+	cursor: pointer;
+	transition: 0.2s;
+	white-space: nowrap;
+}
+
+/* underline анимация */
+.menuItem::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -6px;
+	width: 0%;
+	height: 2px;
+	background: #ff5a5f;
+	transition: 0.3s;
 }
 
 .menuItem:hover {
-	color: #ff5a5f;
+	color: #000;
+}
+
+.menuItem:hover::after {
+	width: 100%;
 }
 
 .menuItemActive {
-	color: #ff5a5f;
+	color: #000;
 	font-weight: 600;
 }
 
+.menuItemActive::after {
+	width: 100%;
+}
+
+/* 💻 БОЛЬШИЕ ЭКРАНЫ */
+@media (min-width: 1400px) {
+	.title {
+		font-size: 32px;
+	}
+
+	.menuItem {
+		font-size: 20px;
+	}
+
+	.menu {
+		gap: 36px;
+	}
+}
+
+/* 📱 ПЛАНШЕТ */
+@media (max-width: 900px) {
+	.title {
+		font-size: 22px;
+	}
+
+	.menuItem {
+		font-size: 16px;
+	}
+
+	.menu {
+		gap: 18px;
+	}
+}
+
+/* 📱 МОБИЛКА */
 @media (max-width: 640px) {
 	.container {
 		flex-direction: column;
+		align-items: flex-start;
 		gap: 10px;
+	}
+
+	.menu {
+		width: 100%;
+		overflow-x: auto;
+		gap: 16px;
+		padding-bottom: 4px;
+	}
+
+	/* убираем скроллбар (красиво) */
+	.menu::-webkit-scrollbar {
+		display: none;
 	}
 }

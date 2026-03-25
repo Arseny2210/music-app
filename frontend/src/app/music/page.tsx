@@ -3,19 +3,26 @@
 import SongList from '@/components/music/SongList/SongList'
 import { getSongs } from '@/services/api'
 import { Song } from '@/types/song'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import styles from './Music.module.css'
 
 export default function MusicPage() {
-	const [songs, setSongs] = useState<Song[]>([])
-	const [genre, setGenre] = useState<string>('all')
+	const [genre, setGenre] = useState<'all' | 'pop' | 'chanson'>('all')
 
-	useEffect(() => {
-		getSongs().then(setSongs)
-	}, [])
+	const {
+		data: songs = [],
+		isLoading,
+		isFetching,
+	} = useQuery<Song[]>({
+		queryKey: ['songs'],
+		queryFn: getSongs,
+	})
 
-	const filteredSongs =
-		genre === 'all' ? songs : songs.filter(song => song.genre === genre)
+	// 🔥 мемоизация (чтобы не пересчитывалось лишний раз)
+	const filteredSongs = useMemo(() => {
+		return genre === 'all' ? songs : songs.filter(song => song.genre === genre)
+	}, [songs, genre])
 
 	return (
 		<div className={styles.container}>
@@ -27,7 +34,14 @@ export default function MusicPage() {
 				<button onClick={() => setGenre('chanson')}>Шансон</button>
 			</div>
 
-			<SongList songs={filteredSongs} />
+			{/* 👉 если хочешь можно показывать "обновляется..." */}
+			{isFetching && !isLoading && (
+				<div style={{ marginBottom: 10, fontSize: 14, color: '#888' }}>
+					Обновляем список...
+				</div>
+			)}
+
+			<SongList songs={filteredSongs} loading={isLoading} />
 		</div>
 	)
 }
