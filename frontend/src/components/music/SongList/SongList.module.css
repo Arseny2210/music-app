@@ -1,33 +1,43 @@
 .grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	gap: 20px;
+	grid-template-columns: repeat(auto-fill, 180px);
+	gap: 18px;
+	justify-content: center;
 }
 
 /* CARD */
 .card {
+	width: 180px;
+	background: #fff;
+	border-radius: 14px;
+	padding: 10px;
+	cursor: pointer;
+	border: 1px solid #ececec;
+
 	display: flex;
 	flex-direction: column;
-	background: #fff;
-	border-radius: 16px;
-	padding: 14px;
-	cursor: pointer;
-	transition: all 0.25s ease;
-	border: 1px solid #ececec;
-	height: 100%;
+
+	transition:
+		transform 0.15s ease,
+		box-shadow 0.2s ease;
 }
 
 .card:hover {
-	transform: translateY(-5px);
-	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+	transform: translateY(-4px);
+	box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+/* 👇 эффект нажатия */
+.card:active {
+	transform: scale(0.97);
 }
 
 /* IMAGE */
 .imageWrapper {
 	position: relative;
 	width: 100%;
-	aspect-ratio: 1 / 1; /* 🔥 всегда квадрат */
-	border-radius: 12px;
+	aspect-ratio: 1 / 1;
+	border-radius: 10px;
 	overflow: hidden;
 	background: #f3f3f3;
 }
@@ -35,14 +45,24 @@
 .cover {
 	width: 100%;
 	height: 100%;
-	object-fit: contain; /* 🔥 НЕ РЕЖЕТ */
+	object-fit: cover;
+	transition: transform 0.3s ease;
 }
 
-/* PLAY BUTTON */
-.play {
+/* 🔥 overlay как в Spotify */
+.overlay {
 	position: absolute;
-	bottom: 10px;
-	right: 10px;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.35);
+	opacity: 0;
+	transition: opacity 0.25s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* PLAY */
+.play {
 	background: #ff5a5f;
 	width: 42px;
 	height: 42px;
@@ -50,53 +70,61 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: white;
-	font-size: 18px;
-	opacity: 0;
-	transform: scale(0.8);
-	transition: all 0.2s ease;
+	color: #fff;
+	font-size: 16px;
+
+	transform: scale(0.7);
+	transition: 0.25s;
+}
+
+/* HOVER EFFECTS */
+.card:hover .overlay {
+	opacity: 1;
 }
 
 .card:hover .play {
-	opacity: 1;
 	transform: scale(1);
+}
+
+.card:hover .cover {
+	transform: scale(1.05);
 }
 
 /* TEXT */
 .name {
-	margin-top: 12px;
+	margin-top: 8px;
 	font-weight: 600;
-	font-size: 15px;
+	font-size: 14px;
 	color: #111;
 
-	/* 🔥 обрезка длинного текста */
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-	min-height: 40px;
+
+	min-height: 34px;
 }
 
 .genre {
-	font-size: 13px;
+	font-size: 12px;
 	color: #71717a;
-	margin-top: 4px;
+	margin-top: 2px;
 }
 
 /* SKELETON */
 .skeletonImage {
 	width: 100%;
 	aspect-ratio: 1 / 1;
-	border-radius: 12px;
+	border-radius: 10px;
 	background: linear-gradient(90deg, #eeeeee 25%, #dddddd 37%, #eeeeee 63%);
 	background-size: 400% 100%;
 	animation: shimmer 1.4s ease infinite;
 }
 
 .skeletonText {
-	height: 14px;
+	height: 12px;
 	width: 80%;
-	margin-top: 12px;
+	margin-top: 8px;
 	border-radius: 6px;
 	background: linear-gradient(90deg, #eeeeee 25%, #dddddd 37%, #eeeeee 63%);
 	background-size: 400% 100%;
@@ -104,9 +132,9 @@
 }
 
 .skeletonSubText {
-	height: 12px;
+	height: 10px;
 	width: 50%;
-	margin-top: 6px;
+	margin-top: 4px;
 	border-radius: 6px;
 	background: linear-gradient(90deg, #eeeeee 25%, #dddddd 37%, #eeeeee 63%);
 	background-size: 400% 100%;
@@ -125,6 +153,12 @@
 /* 📱 MOBILE */
 @media (max-width: 480px) {
 	.grid {
+		grid-template-columns: repeat(auto-fill, 140px);
 		gap: 14px;
+	}
+
+	.card {
+		width: 140px;
+		padding: 8px;
 	}
 }

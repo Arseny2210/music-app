@@ -43,10 +43,13 @@ export default function SongList({ songs, loading }: Props) {
 							width={300}
 							height={300}
 							className={styles.cover}
-							sizes='(max-width: 768px) 100vw, 300px'
+							sizes='(max-width: 768px) 100vw, 180px'
 						/>
 
-						<div className={styles.play}>▶</div>
+						{/* 🔥 overlay как в Spotify */}
+						<div className={styles.overlay}>
+							<div className={styles.play}>▶</div>
+						</div>
 					</div>
 
 					<div className={styles.name}>{song.name}</div>
