@@ -3,10 +3,11 @@
 	min-height: 100vh;
 }
 
+/* CONTAINER */
 .container {
 	max-width: 1000px;
 	margin: 0 auto;
-	padding: 60px 20px;
+	padding: clamp(30px, 5vw, 60px) 16px;
 }
 
 /* HERO */
@@ -16,27 +17,28 @@
 }
 
 .hero h1 {
-	font-size: 42px;
+	font-size: clamp(26px, 5vw, 42px);
 	font-weight: 700;
 	color: #000;
 	margin-bottom: 15px;
+	line-height: 1.2;
 }
 
 .hero p {
 	color: #555;
-	font-size: 18px;
+	font-size: clamp(14px, 2.5vw, 18px);
 	max-width: 600px;
 	margin: 0 auto 20px;
 }
 
+/* BUTTONS */
 .heroButtons {
 	display: flex;
-	gap: 10px;
+	gap: 30px;
 	justify-content: center;
 	flex-wrap: wrap;
 }
 
-/* BUTTONS */
 .primaryBtn {
 	background: #000;
 	color: #fff;
@@ -44,10 +46,12 @@
 	border-radius: 10px;
 	text-decoration: none;
 	transition: 0.2s;
+	font-weight: 500;
 }
 
 .primaryBtn:hover {
 	background: #222;
+	transform: scale(1.03);
 }
 
 .secondaryBtn {
@@ -63,43 +67,68 @@
 	background: #ddd;
 }
 
-/* GRID */
+/* GRID универсальный */
 .grid {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 15px;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 16px;
 	margin-top: 20px;
 }
 
+/* CARD */
 .card {
 	text-align: center;
 	background: #fff;
-	padding: 20px;
+	padding: clamp(16px, 3vw, 22px);
 	border-radius: 16px;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 	transition: 0.25s;
+	cursor: pointer;
 }
 
 .card:hover {
 	transform: translateY(-5px);
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
 }
 
+/* SMALL TITLE */
 .titleSmall {
-	font-size: 20px;
+	font-size: clamp(18px, 3vw, 22px);
+	font-weight: 600;
 }
 
-/* BLOCK */
-.block {
+/* USE CASES */
+.useCases {
 	margin-top: 40px;
+	text-align: center;
 }
 
-.block h2 {
-	margin-bottom: 10px;
+.useGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	gap: 12px;
+	margin-top: 20px;
 }
 
-.block li {
-	color: #444;
-	margin-bottom: 6px;
+.useCard {
+	background: #fff;
+	padding: 16px;
+	border-radius: 14px;
+	font-weight: 500;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+	cursor: pointer;
+	transition: 0.2s;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.useCard:hover {
+	background: #000;
+	color: #fff;
+	transform: scale(1.05);
 }
 
 /* PRICING */
@@ -110,16 +139,22 @@
 
 .priceGrid {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 15px;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 16px;
 	margin-top: 20px;
 }
 
 .priceCard {
 	background: #fff;
-	padding: 25px;
+	padding: clamp(18px, 3vw, 25px);
 	border-radius: 16px;
 	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+	cursor: pointer;
+	transition: 0.25s;
+}
+
+.priceCard:hover {
+	transform: translateY(-5px);
 }
 
 .price {
@@ -131,10 +166,9 @@
 /* CTA */
 .cta {
 	margin-top: 50px;
-	padding: 45px 30px;
+	padding: clamp(25px, 5vw, 45px) 20px;
 	border-radius: 20px;
 
-	/* 🖤 спокойный тёмный градиент */
 	background: linear-gradient(135deg, #0f0f10, #1a1a1d);
 
 	color: #fff;
@@ -148,11 +182,10 @@
 }
 
 .cta:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+	transform: translateY(-2px);
+	box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
 }
 
-/* лёгкий внутренний свет (очень subtle) */
 .cta::after {
 	content: '';
 	position: absolute;
@@ -166,9 +199,8 @@
 	pointer-events: none;
 }
 
-/* текст */
 .cta h2 {
-	font-size: 24px;
+	font-size: clamp(20px, 3vw, 26px);
 	margin-bottom: 8px;
 }
 
@@ -177,26 +209,21 @@
 	margin-bottom: 20px;
 }
 
-/* кнопка — контрастная */
 .cta .primaryBtn {
 	background: #fff;
 	color: #000;
 	font-weight: 600;
-	padding: 12px 22px;
-	border-radius: 10px;
-	transition: 0.2s;
 }
 
 .cta .primaryBtn:hover {
 	background: #e5e5e5;
-	transform: scale(1.05);
 }
 
 /* CONTACTS */
 .contacts {
 	margin-top: 50px;
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 	gap: 10px;
 }
 
@@ -216,64 +243,19 @@
 
 .contacts a:hover {
 	transform: translateY(-3px);
+	background: #f3f3f3;
 }
 
-/* ADAPTIVE */
-@media (max-width: 768px) {
-	.hero h1 {
-		font-size: 28px;
-	}
-
-	.grid {
-		grid-template-columns: 1fr;
-	}
-
-	.priceGrid {
-		grid-template-columns: 1fr;
-	}
-
-	.contacts {
-		grid-template-columns: repeat(2, 1fr);
-	}
-}
-
-/* USE CASES */
-.useCases {
-	margin-top: 40px;
-	text-align: center;
-}
-
-.useGrid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 12px;
-	margin-top: 20px;
-}
-
-.useCard {
-	background: #fff;
-	padding: 18px;
-	border-radius: 14px;
-	font-weight: 500;
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-	cursor: pointer;
-	transition: 0.2s;
-}
-
-.useCard:hover {
-	background: #000;
-	color: #fff;
-}
-
-/* усилим кликабельность */
-.card,
-.priceCard,
-.contacts a {
-	cursor: pointer;
-}
-
+/* MOBILE EXTRA */
 @media (max-width: 480px) {
-	.contacts {
-		grid-template-columns: 1fr;
+	.heroButtons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.primaryBtn,
+	.secondaryBtn {
+		width: 100%;
+		text-align: center;
 	}
 }

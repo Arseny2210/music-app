@@ -96,7 +96,7 @@ export default function HomePage() {
 						{[
 							{ name: 'Песня', price: '500 ₽' },
 							{ name: 'Стихи', price: '250 ₽' },
-							{ name: 'Готовые', price: '100 ₽' },
+							{ name: 'Готовая музыка', price: '100 ₽' },
 						].map((item, i) => (
 							<motion.div
 								key={i}
