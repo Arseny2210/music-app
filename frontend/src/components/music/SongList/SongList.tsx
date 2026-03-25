@@ -11,7 +11,7 @@ type Props = {
 }
 
 export default function SongList({ songs, loading }: Props) {
-	const { play, preload } = usePlayer()
+	const { play } = usePlayer()
 
 	// 🔥 SKELETON
 	if (loading) {
@@ -34,7 +34,6 @@ export default function SongList({ songs, loading }: Props) {
 				<div
 					key={song.id}
 					onClick={() => play(song, songs)}
-					onMouseEnter={() => preload(song)}
 					className={styles.card}
 				>
 					<div className={styles.imageWrapper}>

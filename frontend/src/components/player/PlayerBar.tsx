@@ -1,11 +1,12 @@
 'use client'
 
+import { streamUrl } from '@/services/api'
 import { useEffect, useState } from 'react'
 import styles from './PlayerBar.module.css'
 import { usePlayer } from './PlayerContext'
 
 export default function PlayerBar() {
-	const { current, isPlaying, pause, next, prev, audioRef } = usePlayer()
+	const { current, isPlaying, pause, play, next, prev, audioRef } = usePlayer()
 
 	const [progress, setProgress] = useState(0)
 
@@ -14,17 +15,14 @@ export default function PlayerBar() {
 		if (!audio) return
 
 		const update = () => {
-			if (!audio.duration) return
 			const value = (audio.currentTime / audio.duration) * 100
-			setProgress(value)
+			setProgress(value || 0)
 		}
 
 		audio.addEventListener('timeupdate', update)
 		audio.onended = next
 
-		return () => {
-			audio.removeEventListener('timeupdate', update)
-		}
+		return () => audio.removeEventListener('timeupdate', update)
 	}, [current, next])
 
 	if (!current) return null
@@ -40,16 +38,7 @@ export default function PlayerBar() {
 					</button>
 
 					<button
-						onClick={() => {
-							const audio = audioRef.current
-							if (!audio) return
-
-							if (isPlaying) {
-								audio.pause()
-							} else {
-								audio.play()
-							}
-						}}
+						onClick={() => (isPlaying ? pause() : play(current, []))}
 						className={styles.playBtn}
 					>
 						{isPlaying ? '⏸' : '▶'}
@@ -64,7 +53,11 @@ export default function PlayerBar() {
 					<div className={styles.bar} style={{ width: `${progress}%` }} />
 				</div>
 
-				<audio ref={audioRef} preload='auto' />
+				<audio
+					ref={audioRef}
+					src={streamUrl(`/stream/${current.filename}`)}
+					preload='metadata'
+				/>
 			</div>
 		</div>
 	)
