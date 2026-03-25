@@ -26,19 +26,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
 	const play = async (song: Song, list: Song[]) => {
 		const audio = audioRef.current
-
-		console.log('🎧 PLAY CLICKED')
-		console.log('➡️ Song:', song)
-
-		if (!audio) {
-			console.log('❌ audioRef is NULL')
-			return
-		}
+		if (!audio) return
 
 		const url = streamUrl(`/stream/${song.filename}`)
-
-		console.log('➡️ URL:', url)
-		console.log('➡️ Current audio.src:', audio.src)
 
 		setQueue(list)
 		setCurrent(song)
@@ -48,42 +38,29 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
 		try {
 			await audio.play()
-			console.log('✅ AUDIO STARTED')
 			setIsPlaying(true)
-		} catch (e) {
-			console.error('❌ PLAY ERROR:', e)
-		}
+		} catch {}
 	}
 
 	const pause = () => {
 		const audio = audioRef.current
 		if (!audio) return
-
 		audio.pause()
-		console.log('⏸ PAUSE')
 		setIsPlaying(false)
 	}
 
 	const next = () => {
-		console.log('⏭ NEXT')
 		if (!current) return
-
 		const index = queue.findIndex(s => s.id === current.id)
 		const nextSong = queue[index + 1]
-
 		if (nextSong) play(nextSong, queue)
-		else console.log('⚠️ no next song')
 	}
 
 	const prev = () => {
-		console.log('⏮ PREV')
 		if (!current) return
-
 		const index = queue.findIndex(s => s.id === current.id)
 		const prevSong = queue[index - 1]
-
 		if (prevSong) play(prevSong, queue)
-		else console.log('⚠️ no prev song')
 	}
 
 	return (

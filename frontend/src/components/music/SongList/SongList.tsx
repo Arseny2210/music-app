@@ -32,10 +32,7 @@ export default function SongList({ songs, loading }: Props) {
 			{songs.map(song => (
 				<div
 					key={song.id}
-					onClick={() => {
-						console.log('🖱 CLICK CARD:', song.name)
-						play(song, songs)
-					}}
+					onClick={() => play(song, songs)}
 					className={styles.card}
 				>
 					<div className={styles.imageWrapper}>
