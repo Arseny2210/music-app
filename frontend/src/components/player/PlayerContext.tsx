@@ -1,5 +1,6 @@
 'use client'
 
+import { streamUrl } from '@/services/api'
 import { Song } from '@/types/song'
 import { createContext, useContext, useRef, useState } from 'react'
 
@@ -11,6 +12,7 @@ type PlayerContextType = {
 	pause: () => void
 	next: () => void
 	prev: () => void
+	preload: (song: Song) => void
 	audioRef: React.RefObject<HTMLAudioElement | null>
 }
 
@@ -23,14 +25,45 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
 	const audioRef = useRef<HTMLAudioElement>(null)
 
+	// 🔥 preload при наведении
+	const preload = (song: Song) => {
+		const audio = new Audio()
+		audio.src = streamUrl(`/stream/${song.filename}`)
+		audio.preload = 'auto'
+	}
+
+	const fadeIn = (audio: HTMLAudioElement) => {
+		audio.volume = 0
+		let vol = 0
+
+		const interval = setInterval(() => {
+			vol += 0.1
+			audio.volume = Math.min(vol, 1)
+
+			if (vol >= 1) clearInterval(interval)
+		}, 30)
+	}
+
 	const play = (song: Song, list: Song[]) => {
+		const audio = audioRef.current
+		if (!audio) return
+
 		setQueue(list)
 		setCurrent(song)
 
-		setTimeout(() => {
-			audioRef.current?.play()
-			setIsPlaying(true)
-		}, 50)
+		const url = streamUrl(`/stream/${song.filename}`)
+
+		// 🔥 если тот же трек — не трогаем
+		if (audio.src !== url) {
+			audio.src = url
+		}
+
+		audio.currentTime = 0
+		audio.play()
+
+		fadeIn(audio) // 🔥 вау эффект
+
+		setIsPlaying(true)
 	}
 
 	const pause = () => {
@@ -40,27 +73,31 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
 	const next = () => {
 		if (!current) return
-
 		const index = queue.findIndex(s => s.id === current.id)
-
 		const nextSong = queue[index + 1]
-
 		if (nextSong) play(nextSong, queue)
 	}
 
 	const prev = () => {
 		if (!current) return
-
 		const index = queue.findIndex(s => s.id === current.id)
-
 		const prevSong = queue[index - 1]
-
 		if (prevSong) play(prevSong, queue)
 	}
 
 	return (
 		<PlayerContext.Provider
-			value={{ current, queue, play, pause, next, prev, isPlaying, audioRef }}
+			value={{
+				current,
+				queue,
+				play,
+				pause,
+				next,
+				prev,
+				isPlaying,
+				audioRef,
+				preload,
+			}}
 		>
 			{children}
 		</PlayerContext.Provider>
@@ -69,8 +106,6 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
 export function usePlayer() {
 	const ctx = useContext(PlayerContext)
-
 	if (!ctx) throw new Error('PlayerProvider missing')
-
 	return ctx
 }

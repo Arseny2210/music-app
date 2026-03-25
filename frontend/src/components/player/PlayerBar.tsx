@@ -1,6 +1,5 @@
 'use client'
 
-import { streamUrl } from '@/services/api'
 import { useEffect, useState } from 'react'
 import styles from './PlayerBar.module.css'
 import { usePlayer } from './PlayerContext'
@@ -53,11 +52,7 @@ export default function PlayerBar() {
 					<div className={styles.bar} style={{ width: `${progress}%` }} />
 				</div>
 
-				<audio
-					ref={audioRef}
-					src={streamUrl(`/stream/${current.filename}`)}
-					preload='metadata'
-				/>
+				<audio ref={audioRef} preload='auto' />
 			</div>
 		</div>
 	)
