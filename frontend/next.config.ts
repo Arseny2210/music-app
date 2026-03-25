@@ -2,13 +2,11 @@ const nextConfig = {
 	images: {
 		remotePatterns: [
 			{
-				protocol: 'http',
-				hostname: 'localhost',
-				port: '8000',
+				protocol: 'https',
+				hostname: 'music-app-7k4h.onrender.com',
 				pathname: '/covers/**',
 			},
 		],
-		dangerouslyAllowLocalIP: true,
 	},
 }
 
