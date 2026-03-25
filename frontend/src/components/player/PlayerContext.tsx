@@ -25,11 +25,13 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
 	const audioRef = useRef<HTMLAudioElement>(null)
 
-	// 🔥 preload при наведении
+	// 🔥 preload (упрощённый и безопасный)
 	const preload = (song: Song) => {
-		const audio = new Audio()
-		audio.src = streamUrl(`/stream/${song.filename}`)
-		audio.preload = 'auto'
+		const link = document.createElement('link')
+		link.rel = 'preload'
+		link.as = 'audio'
+		link.href = streamUrl(`/stream/${song.filename}`)
+		document.head.appendChild(link)
 	}
 
 	const fadeIn = (audio: HTMLAudioElement) => {
@@ -39,35 +41,39 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 		const interval = setInterval(() => {
 			vol += 0.1
 			audio.volume = Math.min(vol, 1)
-
 			if (vol >= 1) clearInterval(interval)
 		}, 30)
 	}
 
-	const play = (song: Song, list: Song[]) => {
+	const play = async (song: Song, list: Song[]) => {
 		const audio = audioRef.current
 		if (!audio) return
+
+		const url = streamUrl(`/stream/${song.filename}`)
+
+		// 🔥 ВСЕГДА ставим src (без сравнения!)
+		audio.src = url
 
 		setQueue(list)
 		setCurrent(song)
 
-		const url = streamUrl(`/stream/${song.filename}`)
-
-		// 🔥 если тот же трек — не трогаем
-		if (audio.src !== url) {
-			audio.src = url
-		}
-
 		audio.currentTime = 0
-		audio.play()
 
-		fadeIn(audio) // 🔥 вау эффект
-
-		setIsPlaying(true)
+		try {
+			await audio.play()
+			fadeIn(audio)
+			setIsPlaying(true)
+		} catch (e) {
+			console.error('Play error:', e)
+			setIsPlaying(false)
+		}
 	}
 
 	const pause = () => {
-		audioRef.current?.pause()
+		const audio = audioRef.current
+		if (!audio) return
+
+		audio.pause()
 		setIsPlaying(false)
 	}
 
