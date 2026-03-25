@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,8 +25,21 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting up the application...")
-    # Create database tables
-    Base.metadata.create_all(bind=engine)
+    # Create database tables.
+    # Postgres may still be starting even if docker reports "healthy" briefly,
+    # so we retry a few times to avoid immediate crash on startup.
+    last_exc: Exception | None = None
+    for _ in range(15):
+        try:
+            Base.metadata.create_all(bind=engine)
+            last_exc = None
+            break
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            logger.warning("DB not ready yet, retrying: %s", exc)
+            await asyncio.sleep(2)
+    if last_exc is not None:
+        raise last_exc
     logger.info("Database tables created/verified")
 
     yield

@@ -18,7 +18,14 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     ENVIRONMENT: str = "development"
 
-    model_config = SettingsConfigDict(env_file=".env", env_ignore_empty=True)
+    # Some env files are shared/contain extra keys that are not represented
+    # in this Settings model (e.g. frontend variables). Ignore them instead
+    # of crashing the app on startup.
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_ignore_empty=True,
+        extra="ignore",
+    )
 
 
 settings = Settings()
