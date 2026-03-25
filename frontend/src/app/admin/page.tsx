@@ -49,8 +49,8 @@ export default function AdminPage() {
 		}
 	}
 
-	const logoutUser = async () => {
-		await logout()
+	const logoutUser = () => {
+		logout()
 		setAuth(false)
 		setSongs([])
 	}

@@ -1,32 +1,43 @@
 const API = process.env.NEXT_PUBLIC_API_URL!
 
+// ---------------- AUTH ----------------
+
 export async function login(username: string, password: string) {
 	const formData = new FormData()
-
 	formData.append('username', username)
 	formData.append('password', password)
 
-	await fetch(`${API}/auth/login`, {
+	const res = await fetch(`${API}/auth/login`, {
 		method: 'POST',
 		body: formData,
-		credentials: 'include',
 	})
+
+	if (!res.ok) throw new Error('Login failed')
+
+	const data = await res.json()
+
+	localStorage.setItem('token', data.access_token)
 }
 
-export async function logout() {
-	await fetch(`${API}/auth/logout`, {
-		method: 'POST',
-		credentials: 'include',
-	})
+export function logout() {
+	localStorage.removeItem('token')
 }
 
 export async function checkAuth() {
+	const token = localStorage.getItem('token')
+
+	if (!token) return false
+
 	const res = await fetch(`${API}/auth/me`, {
-		credentials: 'include',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
 	})
 
 	return res.ok
 }
+
+// ---------------- SONGS ----------------
 
 export async function getSongs() {
 	const res = await fetch(`${API}/songs`)
@@ -34,9 +45,13 @@ export async function getSongs() {
 }
 
 export async function deleteSong(id: number) {
+	const token = localStorage.getItem('token')
+
 	await fetch(`${API}/songs/${id}`, {
 		method: 'DELETE',
-		credentials: 'include',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
 	})
 }
 
@@ -46,8 +61,9 @@ export async function uploadSong(
 	cover: File,
 	genre: string,
 ) {
-	const formData = new FormData()
+	const token = localStorage.getItem('token')
 
+	const formData = new FormData()
 	formData.append('name', name)
 	formData.append('file', file)
 	formData.append('cover', cover)
@@ -55,8 +71,10 @@ export async function uploadSong(
 
 	await fetch(`${API}/upload`, {
 		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
 		body: formData,
-		credentials: 'include',
 	})
 }
 
