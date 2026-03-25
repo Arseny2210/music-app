@@ -1,12 +1,11 @@
 'use client'
 
-import { streamUrl } from '@/services/api'
 import { useEffect, useState } from 'react'
 import styles from './PlayerBar.module.css'
 import { usePlayer } from './PlayerContext'
 
 export default function PlayerBar() {
-	const { current, isPlaying, pause, play, next, prev, audioRef } = usePlayer()
+	const { current, isPlaying, pause, next, prev, audioRef } = usePlayer()
 
 	const [progress, setProgress] = useState(0)
 
@@ -14,15 +13,27 @@ export default function PlayerBar() {
 		const audio = audioRef.current
 		if (!audio) return
 
+		console.log('🎵 AUDIO INIT')
+
 		const update = () => {
+			if (!audio.duration) return
 			const value = (audio.currentTime / audio.duration) * 100
-			setProgress(value || 0)
+			setProgress(value)
 		}
 
 		audio.addEventListener('timeupdate', update)
+
+		audio.onplay = () => console.log('▶️ onplay')
+		audio.onpause = () => console.log('⏸ onpause')
+		audio.onwaiting = () => console.log('⏳ buffering')
+		audio.oncanplay = () => console.log('✅ can play')
+		audio.onerror = e => console.log('❌ audio error', e)
+
 		audio.onended = next
 
-		return () => audio.removeEventListener('timeupdate', update)
+		return () => {
+			audio.removeEventListener('timeupdate', update)
+		}
 	}, [current, next])
 
 	if (!current) return null
@@ -33,18 +44,46 @@ export default function PlayerBar() {
 				<div className={styles.title}>{current.name}</div>
 
 				<div className={styles.controls}>
-					<button onClick={prev} className={styles.iconBtn}>
+					<button
+						onClick={() => {
+							console.log('⏮ CLICK PREV')
+							prev()
+						}}
+						className={styles.iconBtn}
+					>
 						⏮
 					</button>
 
 					<button
-						onClick={() => (isPlaying ? pause() : play(current, []))}
+						onClick={() => {
+							const audio = audioRef.current
+							console.log('▶️ CLICK PLAY BUTTON')
+
+							if (!audio) {
+								console.log('❌ audioRef NULL')
+								return
+							}
+
+							console.log('➡️ isPlaying:', isPlaying)
+
+							if (isPlaying) {
+								audio.pause()
+							} else {
+								audio.play()
+							}
+						}}
 						className={styles.playBtn}
 					>
 						{isPlaying ? '⏸' : '▶'}
 					</button>
 
-					<button onClick={next} className={styles.iconBtn}>
+					<button
+						onClick={() => {
+							console.log('⏭ CLICK NEXT')
+							next()
+						}}
+						className={styles.iconBtn}
+					>
 						⏭
 					</button>
 				</div>
@@ -53,11 +92,8 @@ export default function PlayerBar() {
 					<div className={styles.bar} style={{ width: `${progress}%` }} />
 				</div>
 
-				<audio
-					ref={audioRef}
-					src={streamUrl(`/stream/${current.filename}`)}
-					preload='metadata'
-				/>
+				{/* ❗ БЕЗ src */}
+				<audio ref={audioRef} preload='auto' />
 			</div>
 		</div>
 	)

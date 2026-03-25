@@ -13,7 +13,6 @@ type Props = {
 export default function SongList({ songs, loading }: Props) {
 	const { play } = usePlayer()
 
-	// 🔥 SKELETON
 	if (loading) {
 		return (
 			<div className={styles.grid}>
@@ -33,7 +32,10 @@ export default function SongList({ songs, loading }: Props) {
 			{songs.map(song => (
 				<div
 					key={song.id}
-					onClick={() => play(song, songs)}
+					onClick={() => {
+						console.log('🖱 CLICK CARD:', song.name)
+						play(song, songs)
+					}}
 					className={styles.card}
 				>
 					<div className={styles.imageWrapper}>
@@ -43,10 +45,8 @@ export default function SongList({ songs, loading }: Props) {
 							width={300}
 							height={300}
 							className={styles.cover}
-							sizes='(max-width: 768px) 100vw, 180px'
 						/>
 
-						{/* 🔥 overlay как в Spotify */}
 						<div className={styles.overlay}>
 							<div className={styles.play}>▶</div>
 						</div>
