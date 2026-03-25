@@ -1,5 +1,5 @@
 import os
-from fastapi import APIRouter, UploadFile, File, Depends, Cookie, HTTPException, Form
+from fastapi import APIRouter, UploadFile, File, Depends, HTTPException,Header, Form
 from fastapi.responses import StreamingResponse, FileResponse
 from sqlalchemy.orm import Session
 
@@ -22,9 +22,11 @@ def get_db():
         db.close()
 
 
-def require_admin(token: str | None = Cookie(default=None)):
-    if token is None:
-        raise HTTPException(status_code=401, detail="No token")
+def require_admin(authorization: str = Header(None)):
+    if not authorization:
+        raise HTTPException(status_code=401, detail="No auth header")
+
+    token = authorization.replace("Bearer ", "")
 
     payload = verify_token(token)
 
@@ -33,6 +35,8 @@ def require_admin(token: str | None = Cookie(default=None)):
 
     if payload.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Forbidden")
+
+    return payload
 
 
 @router.get("/songs")
