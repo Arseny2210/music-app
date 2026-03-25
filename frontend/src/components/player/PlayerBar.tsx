@@ -36,12 +36,13 @@ export default function PlayerBar() {
 		}
 	}, [current, next])
 
-	if (!current) return null
-
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.inner}>
-				<div className={styles.title}>{current.name}</div>
+				{/* 👉 если трека нет — просто текст */}
+				<div className={styles.title}>
+					{current ? current.name : 'Выберите трек'}
+				</div>
 
 				<div className={styles.controls}>
 					<button
@@ -50,6 +51,7 @@ export default function PlayerBar() {
 							prev()
 						}}
 						className={styles.iconBtn}
+						disabled={!current}
 					>
 						⏮
 					</button>
@@ -64,15 +66,21 @@ export default function PlayerBar() {
 								return
 							}
 
+							if (!current) {
+								console.log('⚠️ no track selected')
+								return
+							}
+
 							console.log('➡️ isPlaying:', isPlaying)
 
 							if (isPlaying) {
 								audio.pause()
 							} else {
-								audio.play()
+								audio.play().catch(e => console.log('❌ play error', e))
 							}
 						}}
 						className={styles.playBtn}
+						disabled={!current}
 					>
 						{isPlaying ? '⏸' : '▶'}
 					</button>
@@ -83,6 +91,7 @@ export default function PlayerBar() {
 							next()
 						}}
 						className={styles.iconBtn}
+						disabled={!current}
 					>
 						⏭
 					</button>
@@ -92,7 +101,7 @@ export default function PlayerBar() {
 					<div className={styles.bar} style={{ width: `${progress}%` }} />
 				</div>
 
-				{/* ❗ БЕЗ src */}
+				{/* 🔥 ВСЕГДА СУЩЕСТВУЕТ */}
 				<audio ref={audioRef} preload='auto' />
 			</div>
 		</div>
