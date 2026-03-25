@@ -41,11 +41,11 @@ def login(
         key="token",
         value=token,
         httponly=True,
-        samesite="lax"
+        secure=True,          # 🔥 ОБЯЗАТЕЛЬНО
+        samesite="none"       # 🔥 ОБЯЗАТЕЛЬНО
     )
 
     return {"status": "ok"}
-
 
 @router.get("/me")
 def me(token: str | None = Cookie(default=None)):
