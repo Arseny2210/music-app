@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response, HTTPException, Depends, Cookie, Form
+from fastapi import APIRouter, HTTPException, Depends, Form, Header
 from sqlalchemy.orm import Session
 
 from app.db.database import SessionLocal
@@ -18,12 +18,10 @@ def get_db():
 
 @router.post("/login")
 def login(
-    response: Response,
     username: str = Form(...),
     password: str = Form(...),
     db: Session = Depends(get_db)
 ):
-
     user = db.query(User).filter(User.username == username).first()
 
     if user is None:
@@ -37,21 +35,15 @@ def login(
         "role": user.role
     })
 
-    response.set_cookie(
-        key="token",
-        value=token,
-        httponly=True,
-        secure=True,          # 🔥 ОБЯЗАТЕЛЬНО
-        samesite="none"       # 🔥 ОБЯЗАТЕЛЬНО
-    )
+    return {"access_token": token}
 
-    return {"status": "ok"}
 
 @router.get("/me")
-def me(token: str | None = Cookie(default=None)):
-
-    if token is None:
+def me(authorization: str = Header(None)):
+    if not authorization:
         raise HTTPException(status_code=401)
+
+    token = authorization.replace("Bearer ", "")
 
     payload = verify_token(token)
 
@@ -62,6 +54,5 @@ def me(token: str | None = Cookie(default=None)):
 
 
 @router.post("/logout")
-def logout(response: Response):
-    response.delete_cookie("token")
+def logout():
     return {"status": "ok"}

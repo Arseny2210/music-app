@@ -1,9 +1,8 @@
 const API = process.env.NEXT_PUBLIC_API_URL!
 
-// ---------------- AUTH ----------------
-
 export async function login(username: string, password: string) {
 	const formData = new FormData()
+
 	formData.append('username', username)
 	formData.append('password', password)
 
@@ -12,14 +11,16 @@ export async function login(username: string, password: string) {
 		body: formData,
 	})
 
-	if (!res.ok) throw new Error('Login failed')
+	if (!res.ok) {
+		throw new Error('Login failed')
+	}
 
 	const data = await res.json()
 
 	localStorage.setItem('token', data.access_token)
 }
 
-export function logout() {
+export async function logout() {
 	localStorage.removeItem('token')
 }
 
@@ -36,8 +37,6 @@ export async function checkAuth() {
 
 	return res.ok
 }
-
-// ---------------- SONGS ----------------
 
 export async function getSongs() {
 	const res = await fetch(`${API}/songs`)
@@ -64,6 +63,7 @@ export async function uploadSong(
 	const token = localStorage.getItem('token')
 
 	const formData = new FormData()
+
 	formData.append('name', name)
 	formData.append('file', file)
 	formData.append('cover', cover)
@@ -71,10 +71,10 @@ export async function uploadSong(
 
 	await fetch(`${API}/upload`, {
 		method: 'POST',
+		body: formData,
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
-		body: formData,
 	})
 }
 

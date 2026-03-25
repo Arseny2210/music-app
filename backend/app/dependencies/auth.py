@@ -1,12 +1,12 @@
-from fastapi import Cookie, HTTPException
+from fastapi import HTTPException, Header
 from app.core.security import verify_token
 
 
-def get_current_user(token: str | None = Cookie(default=None)):
-
-    if token is None:
+def get_current_user(authorization: str = Header(None)):
+    if not authorization:
         raise HTTPException(status_code=401)
 
+    token = authorization.replace("Bearer ", "")
     payload = verify_token(token)
 
     if payload is None:
@@ -15,11 +15,11 @@ def get_current_user(token: str | None = Cookie(default=None)):
     return payload
 
 
-def require_admin(token: str | None = Cookie(default=None)):
-
-    if token is None:
+def require_admin(authorization: str = Header(None)):
+    if not authorization:
         raise HTTPException(status_code=401)
 
+    token = authorization.replace("Bearer ", "")
     payload = verify_token(token)
 
     if payload is None:
