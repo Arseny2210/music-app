@@ -1,4 +1,5 @@
 export interface Song {
+	audio_url: string
 	id: number
 	name: string
 	filename: string

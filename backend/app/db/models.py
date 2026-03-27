@@ -1,4 +1,4 @@
-from sqlalchemy import String, Integer, Text
+from sqlalchemy import Column, String, Integer, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .database import Base
@@ -16,9 +16,10 @@ class User(Base):
 class Song(Base):
     __tablename__ = "songs"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String)
-    filename: Mapped[str] = mapped_column(String)
-    cover: Mapped[str] = mapped_column(String)
-    genre: Mapped[str] = mapped_column(String)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    genre = Column(String, nullable=False)
+
+    audio_url = Column(String, nullable=False)
+    cover_url = Column(String, nullable=False)
 

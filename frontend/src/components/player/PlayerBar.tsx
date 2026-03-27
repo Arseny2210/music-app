@@ -21,19 +21,20 @@ export default function PlayerBar() {
 
 		const onPlay = () => setIsPlaying(true)
 		const onPause = () => setIsPlaying(false)
+		const onEnded = () => next()
 
 		audio.addEventListener('timeupdate', update)
 		audio.addEventListener('play', onPlay)
 		audio.addEventListener('pause', onPause)
-
-		audio.onended = next
+		audio.addEventListener('ended', onEnded)
 
 		return () => {
 			audio.removeEventListener('timeupdate', update)
 			audio.removeEventListener('play', onPlay)
 			audio.removeEventListener('pause', onPause)
+			audio.removeEventListener('ended', onEnded)
 		}
-	}, [next])
+	}, [current, next]) // 👈 важно!
 
 	return (
 		<div className={styles.wrapper}>
