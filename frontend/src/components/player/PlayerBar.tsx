@@ -5,9 +5,10 @@ import styles from './PlayerBar.module.css'
 import { usePlayer } from './PlayerContext'
 
 export default function PlayerBar() {
-	const { current, isPlaying, next, prev, audioRef } = usePlayer()
+	const { current, next, prev, audioRef } = usePlayer()
 
 	const [progress, setProgress] = useState(0)
+	const [isPlaying, setIsPlaying] = useState(false)
 
 	useEffect(() => {
 		const audio = audioRef.current
@@ -18,11 +19,19 @@ export default function PlayerBar() {
 			setProgress((audio.currentTime / audio.duration) * 100)
 		}
 
+		const onPlay = () => setIsPlaying(true)
+		const onPause = () => setIsPlaying(false)
+
 		audio.addEventListener('timeupdate', update)
+		audio.addEventListener('play', onPlay)
+		audio.addEventListener('pause', onPause)
+
 		audio.onended = next
 
 		return () => {
 			audio.removeEventListener('timeupdate', update)
+			audio.removeEventListener('play', onPlay)
+			audio.removeEventListener('pause', onPause)
 		}
 	}, [next])
 
@@ -43,10 +52,10 @@ export default function PlayerBar() {
 							const audio = audioRef.current
 							if (!audio || !current) return
 
-							if (isPlaying) {
-								audio.pause()
-							} else {
+							if (audio.paused) {
 								audio.play()
+							} else {
+								audio.pause()
 							}
 						}}
 						className={styles.playBtn}
