@@ -40,11 +40,13 @@ async def save_song(
     supabase.storage.from_("music").upload(
         file_name,
         file_content,
-        {"content-type": file.content_type},
+        {
+            "content-type": file.content_type,
+            "upsert": "true"
+        },
     )
 
     audio_url = supabase.storage.from_("music").get_public_url(file_name)["data"]["publicUrl"]
-    cover_url = supabase.storage.from_("music").get_public_url(cover_name)["data"]["publicUrl"]
 
     # --- COVER ---
     cover_ext = (cover.filename or "").split(".")[-1]
@@ -58,7 +60,7 @@ async def save_song(
         {"content-type": cover.content_type},
     )
 
-    cover_url = supabase.storage.from_("music").get_public_url(cover_name)
+    cover_url = supabase.storage.from_("music").get_public_url(cover_name)["data"]["publicUrl"]
 
     # --- SAVE DB ---
     song = Song(

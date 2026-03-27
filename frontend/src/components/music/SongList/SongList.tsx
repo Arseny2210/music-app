@@ -37,11 +37,12 @@ export default function SongList({ songs, loading }: Props) {
 				>
 					<div className={styles.imageWrapper}>
 						<Image
-							src={`${process.env.NEXT_PUBLIC_API_URL}/covers/${song.cover}`}
+							src={song.cover_url}
 							alt={song.name}
 							width={300}
 							height={300}
 							className={styles.cover}
+							unoptimized
 						/>
 
 						<div className={styles.overlay}>

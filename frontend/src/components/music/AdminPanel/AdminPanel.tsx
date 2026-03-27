@@ -17,14 +17,18 @@ export default function AdminPanel({ reload }: Props) {
 	const upload = async () => {
 		if (!name || !file || !cover) return
 
-		await uploadSong(name, file, cover, genre)
+		try {
+			await uploadSong(name, file, cover, genre)
 
-		setName('')
-		setFile(null)
-		setCover(null)
-		setGenre('pop')
+			setName('')
+			setFile(null)
+			setCover(null)
+			setGenre('pop')
 
-		reload()
+			reload()
+		} catch (error) {
+			alert(error instanceof Error ? error.message : 'Ошибка загрузки')
+		}
 	}
 
 	return (

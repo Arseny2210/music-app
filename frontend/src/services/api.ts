@@ -1,5 +1,17 @@
 const API = process.env.NEXT_PUBLIC_API_URL!
 
+async function parseError(res: Response, fallback: string) {
+	try {
+		const data = await res.json()
+		if (data?.detail && typeof data.detail === 'string') {
+			return data.detail
+		}
+	} catch {
+		// no-op: backend may return plain text/empty body
+	}
+	return fallback
+}
+
 export async function login(username: string, password: string) {
 	const formData = new FormData()
 
@@ -12,7 +24,7 @@ export async function login(username: string, password: string) {
 	})
 
 	if (!res.ok) {
-		throw new Error('Login failed')
+		throw new Error(await parseError(res, 'Login failed'))
 	}
 
 	const data = await res.json()
@@ -29,29 +41,38 @@ export async function checkAuth() {
 
 	if (!token) return false
 
-	const res = await fetch(`${API}/auth/me`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	})
-
-	return res.ok
+	try {
+		const res = await fetch(`${API}/auth/me`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+		return res.ok
+	} catch {
+		return false
+	}
 }
 
 export async function getSongs() {
 	const res = await fetch(`${API}/songs`)
+	if (!res.ok) {
+		throw new Error(await parseError(res, 'Failed to load songs'))
+	}
 	return res.json()
 }
 
 export async function deleteSong(id: number) {
 	const token = localStorage.getItem('token')
 
-	await fetch(`${API}/songs/${id}`, {
+	const res = await fetch(`${API}/songs/${id}`, {
 		method: 'DELETE',
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	})
+	if (!res.ok) {
+		throw new Error(await parseError(res, 'Failed to delete song'))
+	}
 }
 
 export async function uploadSong(
@@ -69,15 +90,14 @@ export async function uploadSong(
 	formData.append('cover', cover)
 	formData.append('genre', genre)
 
-	await fetch(`${API}/upload`, {
+	const res = await fetch(`${API}/upload`, {
 		method: 'POST',
 		body: formData,
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	})
-}
-
-export function streamUrl(url: string) {
-	return `${API}${url}`
+	if (!res.ok) {
+		throw new Error(await parseError(res, 'Failed to upload song'))
+	}
 }

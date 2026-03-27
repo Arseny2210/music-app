@@ -1,5 +1,7 @@
 import os
+from typing import Any
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
 
 
 class Settings(BaseSettings):
@@ -19,8 +21,23 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
     # Environment
-    DEBUG: bool = True
-    ENVIRONMENT: str = "development"
+    DEBUG: bool = False
+    ENVIRONMENT: str = "production"
+
+    # Supabase
+    SUPABASE_URL: str
+    SUPABASE_KEY: str
+
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @classmethod
+    def parse_allowed_origins(cls, value: Any) -> list[str]:
+        if isinstance(value, list):
+            return value
+        if isinstance(value, str):
+            # Supports plain comma-separated env value:
+            # ALLOWED_ORIGINS=https://app.vercel.app,http://localhost:3000
+            return [origin.strip() for origin in value.split(",") if origin.strip()]
+        return ["http://localhost:3000", "http://127.0.0.1:3000"]
 
     # Some env files are shared/contain extra keys that are not represented
     # in this Settings model (e.g. frontend variables). Ignore them instead

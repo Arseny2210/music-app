@@ -37,15 +37,19 @@ export default function AdminPage() {
 	}, [])
 
 	const loginUser = async () => {
-		await login(username, password)
+		try {
+			await login(username, password)
 
-		const ok = await checkAuth()
+			const ok = await checkAuth()
 
-		if (ok) {
-			setAuth(true)
-			await loadSongs()
-		} else {
-			alert('Неверный логин или пароль')
+			if (ok) {
+				setAuth(true)
+				await loadSongs()
+			} else {
+				alert('Неверный логин или пароль')
+			}
+		} catch (error) {
+			alert(error instanceof Error ? error.message : 'Ошибка входа')
 		}
 	}
 
@@ -56,8 +60,12 @@ export default function AdminPage() {
 	}
 
 	const removeSong = async (id: number) => {
-		await deleteSong(id)
-		await loadSongs()
+		try {
+			await deleteSong(id)
+			await loadSongs()
+		} catch (error) {
+			alert(error instanceof Error ? error.message : 'Ошибка удаления')
+		}
 	}
 
 	if (loading) {

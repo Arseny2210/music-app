@@ -34,7 +34,7 @@ export default function PlayerBar() {
 			audio.removeEventListener('pause', onPause)
 			audio.removeEventListener('ended', onEnded)
 		}
-	}, [current, next]) // 👈 важно!
+	}, [audioRef, current, next]) // 👈 важно!
 
 	return (
 		<div className={styles.wrapper}>

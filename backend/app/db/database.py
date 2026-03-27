@@ -9,7 +9,7 @@ class Base(DeclarativeBase):
 
 
 engine = create_engine(
-    settings.DATABASE_URL,
+    settings.sqlalchemy_database_url,
     pool_size=10,
     max_overflow=20,
     pool_pre_ping=True

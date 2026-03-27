@@ -1,7 +1,14 @@
 from supabase import create_client, Client
-import os
+from app.core.config import settings
+import httpx
 
-url: str = os.getenv("SUPABASE_URL")
-key: str = os.getenv("SUPABASE_KEY")
+url: str = settings.SUPABASE_URL
+key: str = settings.SUPABASE_KEY
 
-supabase: Client = create_client(url, key)
+http_client = httpx.Client(timeout=60.0)
+
+supabase: Client = create_client(
+    url,
+    key,
+    options={"http_client": http_client}
+)
