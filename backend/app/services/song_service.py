@@ -7,18 +7,21 @@ from app.core.supabase import supabase
 
 
 def list_songs(db: Session):
-    songs = db.query(Song).all()
-
-    return [
-        {
-            "id": s.id,
-            "name": s.name,
-            "genre": s.genre,
-            "audio_url": s.audio_url,
-            "cover_url": s.cover_url,
-        }
-        for s in songs
-    ]
+    try:
+        songs = db.query(Song).all()
+        return [
+            {
+                "id": s.id,
+                "name": s.name,
+                "genre": s.genre,
+                "audio_url": s.audio_url,
+                "cover_url": s.cover_url,
+            }
+            for s in songs
+        ]
+    except Exception as e:
+        print("DB ERROR:", e)
+        raise e
 
 
 async def save_song(
@@ -40,7 +43,8 @@ async def save_song(
         {"content-type": file.content_type},
     )
 
-    audio_url = supabase.storage.from_("music").get_public_url(file_name)
+    audio_url = supabase.storage.from_("music").get_public_url(file_name)["data"]["publicUrl"]
+    cover_url = supabase.storage.from_("music").get_public_url(cover_name)["data"]["publicUrl"]
 
     # --- COVER ---
     cover_ext = (cover.filename or "").split(".")[-1]

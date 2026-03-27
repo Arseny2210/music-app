@@ -4,7 +4,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Database
-    DATABASE_URL: str = "postgresql+psycopg2://arseny:arseny@localhost:5433/music_app"
+    DATABASE_URL: str
+
+    @property
+    def sqlalchemy_database_url(self):
+        return self.DATABASE_URL.replace("postgresql://", "postgresql+psycopg2://")
 
     # Security
     SECRET_KEY: str = "CHANGE_THIS_IN_PRODUCTION_TO_A_RANDOM_64_CHARACTER_STRING"
