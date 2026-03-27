@@ -6,6 +6,11 @@ from app.db.models import Song
 from app.core.supabase import supabase
 
 
+from sqlalchemy.orm import Session
+
+from app.db.models import Song
+
+
 def list_songs(db: Session):
     try:
         songs = db.query(Song).all()
@@ -23,6 +28,26 @@ def list_songs(db: Session):
         print("DB ERROR:", e)
         raise e
 
+
+def create_song(
+    db: Session,
+    name: str,
+    genre: str,
+    audio_url: str,
+    cover_url: str,
+):
+    song = Song(
+        name=name,
+        genre=genre,
+        audio_url=audio_url,
+        cover_url=cover_url,
+    )
+
+    db.add(song)
+    db.commit()
+    db.refresh(song)
+
+    return song
 
 async def save_song(
     db: Session,

@@ -1,3 +1,5 @@
+import { supabase } from './supabaseClient'
+
 const API = process.env.NEXT_PUBLIC_API_URL!
 
 async function parseError(res: Response, fallback: string) {
@@ -83,20 +85,42 @@ export async function uploadSong(
 ) {
 	const token = localStorage.getItem('token')
 
-	const formData = new FormData()
+	const audioName = `${crypto.randomUUID()}.${file.name.split('.').pop()}`
+	const coverName = `${crypto.randomUUID()}.${cover.name.split('.').pop()}`
 
-	formData.append('name', name)
-	formData.append('file', file)
-	formData.append('cover', cover)
-	formData.append('genre', genre)
+	// upload audio
+	const { error: audioError } = await supabase.storage
+		.from('music')
+		.upload(audioName, file)
 
-	const res = await fetch(`${API}/upload`, {
+	if (audioError) throw audioError
+
+	// upload cover
+	const { error: coverError } = await supabase.storage
+		.from('music')
+		.upload(coverName, cover)
+
+	if (coverError) throw coverError
+
+	const audioUrl = supabase.storage.from('music').getPublicUrl(audioName)
+		.data.publicUrl
+	const coverUrl = supabase.storage.from('music').getPublicUrl(coverName)
+		.data.publicUrl
+
+	const res = await fetch(`${API}/songs`, {
 		method: 'POST',
-		body: formData,
 		headers: {
+			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		},
+		body: JSON.stringify({
+			name,
+			genre,
+			audio_url: audioUrl,
+			cover_url: coverUrl,
+		}),
 	})
+
 	if (!res.ok) {
 		throw new Error(await parseError(res, 'Failed to upload song'))
 	}

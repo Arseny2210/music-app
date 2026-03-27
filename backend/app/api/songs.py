@@ -1,12 +1,20 @@
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, Header, Form
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 from app.db.database import SessionLocal
 from app.db.models import Song
-from app.services.song_service import list_songs, save_song
+from app.services.song_service import list_songs, create_song
 from app.core.security import verify_token
 
 router = APIRouter()
+
+
+class SongCreate(BaseModel):
+    name: str
+    genre: str
+    audio_url: str
+    cover_url: str
 
 
 def get_db():
@@ -38,22 +46,19 @@ def get_songs(db: Session = Depends(get_db)):
     return list_songs(db)
 
 
-@router.post("/upload")
-async def upload_song(
-    name: str = Form(...),
-    genre: str = Form(...),
-    file: UploadFile = File(...),
-    cover: UploadFile = File(...),
+@router.post("/songs")
+def create_song_endpoint(
+    data: SongCreate,
     db: Session = Depends(get_db),
     _: None = Depends(require_admin),
 ):
-    if not file.content_type or not file.content_type.startswith("audio"):
-        raise HTTPException(400, "Invalid audio file")
-
-    if not cover.content_type or not cover.content_type.startswith("image"):
-        raise HTTPException(400, "Invalid cover file")
-
-    song = await save_song(db, name, genre, file, cover)
+    song = create_song(
+        db,
+        data.name,
+        data.genre,
+        data.audio_url,
+        data.cover_url,
+    )
 
     return {
         "id": song.id,
