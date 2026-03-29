@@ -142,7 +142,7 @@ export default function HomePage() {
 						{
 							icon: <ShoppingBag size={18} />,
 							name: 'Avito',
-							link: '#',
+							link: 'https://www.avito.ru/bryansk/predlozheniya_uslug/sozdanie_pesen_na_zakaz_7838721089',
 						},
 					].map((item, i) => (
 						<motion.a
