@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Mail, MessageCircle, Send, ShoppingBag } from 'lucide-react'
+import { Mail, Send, ShoppingBag } from 'lucide-react'
 import Link from 'next/link'
 import styles from './Home.module.css'
 
@@ -28,7 +28,7 @@ export default function HomePage() {
 						{/* 👉 TELEGRAM */}
 						<motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
 							<Link
-								href='https://t.me/Sen9_32'
+								href='https://t.me/MusicFor_Site'
 								target='_blank'
 								className={styles.primaryBtn}
 							>
@@ -117,7 +117,7 @@ export default function HomePage() {
 
 					<motion.div whileHover={{ scale: 1.07 }} whileTap={{ scale: 0.95 }}>
 						<Link
-							href='https://t.me/your_username'
+							href='https://t.me/MusicFor_Site'
 							target='_blank'
 							className={styles.primaryBtn}
 						>
@@ -132,21 +132,16 @@ export default function HomePage() {
 						{
 							icon: <Send size={18} />,
 							name: 'Telegram',
-							link: 'https://t.me/your_username',
+							link: 'https://t.me/MusicFor_Site',
 						},
 						{
 							icon: <Mail size={18} />,
 							name: 'Email',
-							link: 'mailto:example@mail.com',
+							link: 'Music2202@yandex.ru',
 						},
 						{
 							icon: <ShoppingBag size={18} />,
 							name: 'Avito',
-							link: '#',
-						},
-						{
-							icon: <MessageCircle size={18} />,
-							name: 'VK',
 							link: '#',
 						},
 					].map((item, i) => (
