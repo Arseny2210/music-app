@@ -126,7 +126,7 @@ export default function HomePage() {
 					</motion.div>
 				</motion.section>
 
-				{/* CONTACTS */}
+				{/* CONTACT */}
 				<motion.section {...fadeUp} className={styles.contacts}>
 					{[
 						{
